@@ -1,49 +1,72 @@
-# terraform-github-repositories# Terraform GitHub Repository Module
+# GitHub Terraform Management
 
-A reusable Terraform module that creates and manages a GitHub repository using the [Mineiros GitHub module](https://github.com/mineiros-io/terraform-github-repository).
+This repository manages GitHub repositories, collaborators, and branch protection using Terraform and Terragrunt.
 
-## Features
+## Structure
 
-- Create public/private GitHub repositories
-- Set topics, descriptions, and license
-- Enable/disable issues, wiki, and projects
-- Configure merge settings
-
-## Usage
-
-```hcl
-provider "github" {
-  token = var.github_token
-  owner = var.github_owner
-}
-
-module "repository" {
-  source  = "path/to/this/module"
-
-  repo_name        = "my-repo"
-  repo_description = "Managed by Terraform"
-  repo_visibility  = "public"
-  repo_topics      = ["terraform", "iac"]
-}
+```
+.
+├── live/
+│   └── demo-repo/
+│       ├── repository/
+│       ├── collaborators/
+│       └── branch-protection/
+└── modules/
+    ├── github-repository/
+    ├── github-collaborators/
+    └── github-branch-protection/
 ```
 
-## Inputs
+## Getting Started
 
-| Name             | Type        | Default     | Description                          |
-|------------------|-------------|-------------|--------------------------------------|
-| `github_token`   | `string`    | n/a         | GitHub personal access token         |
-| `github_owner`   | `string`    | n/a         | GitHub organization or username      |
-| `repo_name`      | `string`    | n/a         | Name of the repository               |
-| `repo_description` | `string`  | `""`        | Description of the repository        |
-| `repo_visibility` | `string`   | `"private"` | Visibility of the repository         |
-| `repo_topics`    | `list(string)` | `[]`     | Topics to tag the repository with    |
+### Prerequisites
 
-## Outputs
+- Terraform >= 1.3
+- Terragrunt >= 0.48
+- GitHub PAT (Personal Access Token) with:
+  - `repo`
+  - `admin:org`
+  - `workflow` (optional)
 
-| Name             | Description                     |
-|------------------|---------------------------------|
-| `repository_url` | URL of the created repository   |
+### Environment Setup
+
+Export your GitHub token:
+
+```bash
+export GITHUB_TOKEN="your_token"
+```
+
+### Commands
+
+Initialize:
+
+```bash
+cd live/demo-repo
+terragrunt init
+```
+
+Plan:
+
+```bash
+terragrunt plan-all
+```
+
+Apply:
+
+```bash
+terragrunt apply-all
+```
+
+---
+
+## Modules
+
+- `github-repository`: Creates the GitHub repository.
+- `github-collaborators`: Adds collaborators with appropriate permissions.
+- `github-branch-protection`: Configures branch protection rules.
+
+---
 
 ## License
 
-MIT
+MIT © Karanbir
