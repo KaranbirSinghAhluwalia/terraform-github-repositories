@@ -1,8 +1,5 @@
-github_token = "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"
-github_owner = "your-github-org-or-username"
-
-repositories = [
-  {
+[
+    {
     name         = "repo-one"
     description  = "First repository managed via Terraform"
     visibility   = "private"
@@ -25,10 +22,7 @@ repositories = [
       }
     ]
 
-    secrets = {
-      DOCKER_USERNAME = "alice-docker"
-      DOCKER_TOKEN    = "alice-token-123"
-    }
+    secrets = {}
   },
   {
     name         = "repo-two"
