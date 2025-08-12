@@ -1,72 +1,139 @@
-# GitHub Terraform Management
+# GitHub Repository Management with Terraform + Terragrunt
 
-This repository manages GitHub repositories, collaborators, and branch protection using Terraform and Terragrunt.
+This project manages GitHub repositories, branch protections, collaborators, and secrets using Terraform modules, orchestrated by Terragrunt.
 
-## Structure
+## 📂 Folder Structure
 
 ```
-.
-├── live/
-│   └── demo-repo/
-│       ├── repository/
-│       ├── collaborators/
-│       └── branch-protection/
-└── modules/
-    ├── github-repository/
-    ├── github-collaborators/
-    └── github-branch-protection/
+live/
+└── demo-repo/
+    └── terragrunt.hcl     
+└── terragrunt.hcl    
+modules/
+└── github-repo/             
+    ├── repository/
+    ├── branch-protection/
+    ├── collaborators/
+    └── secrets/
+    └── main.tf
+    └── provider.tf
+    └── variable.tf
+    └── output.tf
+
 ```
 
-## Getting Started
+**Modules Overview:**
+- **repository** → Creates and configures a GitHub repository.
+- **branch-protection** → Sets branch protection rules.
+- **collaborators** → Adds repository collaborators with permissions.
+- **secrets** → Creates repository secrets.
 
-### Prerequisites
+---
 
-- Terraform >= 1.3
-- Terragrunt >= 0.48
-- GitHub PAT (Personal Access Token) with:
-  - `repo`
-  - `admin:org`
-  - `workflow` (optional)
+## 🔑 Provider Configuration
 
-### Environment Setup
+The provider is defined at the root:
 
-Export your GitHub token:
+```hcl
+terraform {
+  required_providers {
+    github = {
+      source  = "integrations/github"
+      version = "6.6.0"
+    }
+  }
+}
 
+provider "github" {
+  owner = var.github_owner
+  token = var.github_token != "" ? var.github_token : null
+}
+```
+
+---
+
+## ⚙️ Variables
+
+```hcl
+variable "github_owner" {
+  description = "GitHub organization or user name to own the repositories"
+  type        = string
+}
+
+variable "github_token" {
+  description = "GitHub personal access token with repo permissions"
+  type        = string
+  sensitive   = true
+}
+```
+
+---
+
+## 🏗 Example Terragrunt Configuration
+
+`live/demo-repo/terragrunt.hcl`:
+
+```hcl
+terraform {
+  source = "../../modules/github-repo"
+}
+
+inputs = {
+  repo_name      = "terraform-repo"
+  repo_description = "Terraform managed repo"
+  repo_visibility  = "private"
+  repo_topics      = ["terraform", "iac"]
+
+  branch_protections = [
+    {
+      pattern        = "main"
+      enforce_admins = true
+      required_pull_request_reviews = {
+        required_approving_review_count = 1
+      }
+    }
+  ]
+
+  collaborators = [
+    { username = "octocat", permission = "admin" }
+  ]
+
+  secrets = {
+    MY_SECRET = "supersecret"
+  }
+}
+```
+
+---
+
+## 🚀 Running
+
+**Change directory:**
 ```bash
-export GITHUB_TOKEN="your_token"
+cd live
 ```
 
-### Commands
-
-Initialize:
-
+**Initialize Terragrunt/Terraform:**
 ```bash
-cd live/demo-repo
 terragrunt init
 ```
 
-Plan:
-
+**Plan changes:**
 ```bash
-terragrunt plan-all
+terragrunt plan
 ```
 
-Apply:
-
+**Apply changes:**
 ```bash
-terragrunt apply-all
+terragrunt apply
 ```
 
 ---
 
-## Modules
-
-- `github-repository`: Creates the GitHub repository.
-- `github-collaborators`: Adds collaborators with appropriate permissions.
-- `github-branch-protection`: Configures branch protection rules.
-
----
-
-## License
-
-MIT © Karanbir
+## 🛠 Notes
+- Your **GitHub Personal Access Token** must have `repo` and `admin:repo_hook` scopes.
+- The `github_owner` can be either a **username** (personal repos) or **organization name** (org repos).
+- To avoid committing secrets, pass `github_token` via environment variable:
+```bash
+export TG_VAR_github_token="ghp_XXXXXXXXXXXXXXXXXXXX"
+```
