@@ -1,0 +1,57 @@
+name: Terragrunt Plan & Apply
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  terragrunt:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_APP_PEM: ${{ secrets.APP_PEM }}
+      GITHUB_APP_INSTALLATION_ID: ${{ secrets.APP_INSTALLATION_ID }}
+      GITHUB_APP_ID: ${{ secrets.APP_ID }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.7.7
+
+      - name: Install Terragrunt
+        run: |
+          curl -L https://github.com/gruntwork-io/terragrunt/releases/download/v0.45.12/terragrunt_linux_amd64 -o /usr/local/bin/terragrunt
+          chmod +x /usr/local/bin/terragrunt
+
+      - name: Write GitHub App PEM to file
+        run: echo "$GITHUB_APP_PEM" > ./app.pem
+
+      - name: Terragrunt Init
+        working-directory: ./live
+        run: terragrunt run-all init
+        env:
+          TF_VAR_github_app_id: ${{ env.GITHUB_APP_ID }}
+          TF_VAR_github_app_installation_id: ${{ env.GITHUB_APP_INSTALLATION_ID }}
+          TF_VAR_github_app_pem_file: "./app.pem"
+
+      - name: Terragrunt Plan
+        working-directory: ./live
+        run: terragrunt run-all plan -out=plan.tfplan
+        env:
+          TF_VAR_github_app_id: ${{ env.GITHUB_APP_ID }}
+          TF_VAR_github_app_installation_id: ${{ env.GITHUB_APP_INSTALLATION_ID }}
+          TF_VAR_github_app_pem_file: "./app.pem"
+
+      - name: Terragrunt Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        working-directory: ./live
+        run: terragrunt run-all apply -auto-approve plan.tfplan
+        env:
+          TF_VAR_github_app_id: ${{ env.GITHUB_APP_ID }}
+          TF_VAR_github_app_installation_id: ${{ env.GITHUB_APP_INSTALLATION_ID }}
+          TF_VAR_github_app_pem_file: "./app.pem"
