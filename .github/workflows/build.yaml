@@ -39,6 +39,13 @@ jobs:
       - name: Normalize PEM
         run: dos2unix ./app.pem || true
 
+      - name: Validate PEM
+        run: |
+          ls -l ${GITHUB_WORKSPACE}/app.pem
+          file ${GITHUB_WORKSPACE}/app.pem
+          head -n 5 ${GITHUB_WORKSPACE}/app.pem
+          tail -n 5 ${GITHUB_WORKSPACE}/app.pem
+          openssl rsa -in ${GITHUB_WORKSPACE}/app.pem -check -noout
 
       - name: Terragrunt Init
         working-directory: ./live
