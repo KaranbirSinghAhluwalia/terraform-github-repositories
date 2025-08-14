@@ -32,11 +32,8 @@ jobs:
 
       - name: Write GitHub App PEM to root
         run: | 
-          cat <<'EOF' > app.pem
-          $GITHUB_APP_PEM
-          EOF
+          echo "${{ secrets.GH_APP_PEM_B64 }}" | base64 --decode > app.pem
           chmod 600 app.pem
-        shell: bash
 
       - name: Generate GitHub App JWT
         run: |
