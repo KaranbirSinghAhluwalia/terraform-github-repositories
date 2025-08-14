@@ -10,6 +10,7 @@ jobs:
   terragrunt-plan-apply:
     runs-on: ubuntu-latest
     env:
+      TF_LOG: "DEBUG"
       GITHUB_APP_PEM: ${{ secrets.APP_PEM }}
       GITHUB_APP_INSTALLATION_ID: ${{ secrets.APP_INSTALLATION_ID }}
       GITHUB_APP_ID: ${{ secrets.APP_ID }}
