@@ -32,16 +32,9 @@ jobs:
       - name: Write GitHub App PEM to root
         run: | 
           printf '%s\n' "$GITHUB_APP_PEM" > ./app.pem
-
-      - name: check files
-        run: ls
       
-      - name: Verify PEM file
-        run: |
-          echo "PEM exists: $(test -f ./app.pem && echo yes || echo no)"
-          echo "First line: $(head -n 1 ./app.pem)"
-          echo "Last line: $(tail -n 1 ./app.pem)"
-          echo "Line count: $(wc -l < ./app.pem)"
+      - name: Normalize PEM
+        run: dos2unix ./app.pem || true
 
       - name: Terragrunt Init
         working-directory: ./live
