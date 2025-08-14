@@ -41,6 +41,10 @@ jobs:
         run: |
           ls -la .
 
+      - name: dir
+        working-directory: ./live
+        run: ls -la .
+
       - name: Terragrunt Init
         working-directory: ./live
         run: terragrunt run-all init
