@@ -12,8 +12,8 @@ provider "github" {
   owner = env("GITHUB_OWNER")
 
   app_auth {
-    id              = get_env("GITHUB_APP_ID")
-    installation_id = get_env("GITHUB_APP_INSTALLATION_ID")
+    id              = 1782237
+    installation_id = 80950058
     pem_file        = "${get_env("GITHUB_WORKSPACE")}/app.pem"
   }
 }
