@@ -32,12 +32,7 @@ jobs:
       - name: Write GitHub App PEM to root
         run: | 
           printf '%s\n' "$GITHUB_APP_PEM" > ./app.pem
-      
-      - name: Install dos2unix
-        run: sudo apt-get update && sudo apt-get install -y dos2unix
-             
-      - name: Normalize PEM
-        run: dos2unix ./app.pem || true
+          chmod 600 ./app.pem
 
       - name: Validate PEM
         run: |
