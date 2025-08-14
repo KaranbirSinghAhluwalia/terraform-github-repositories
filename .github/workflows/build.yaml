@@ -30,10 +30,23 @@ jobs:
           chmod +x /usr/local/bin/terragrunt
 
       - name: Write GitHub App PEM to root
-        run: echo "$GITHUB_APP_PEM" > ./app.pem
+        run: | 
+          printf '%s\n' "$GITHUB_APP_PEM" > ./app.pem
 
       - name: check files
         run: ls
+      
+      - name: Check app.pem contents
+        run: |
+          echo "Checking if app.pem exists and has content"
+          if [ -f "./app.pem" ]; then
+            echo "app.pem exists"
+            # Print first 10 lines to avoid leaking secrets in logs
+            head -n 10 ./app.pem
+          else
+            echo "app.pem does not exist"
+            exit 1
+          fi
 
       - name: Terragrunt Init
         working-directory: ./live
