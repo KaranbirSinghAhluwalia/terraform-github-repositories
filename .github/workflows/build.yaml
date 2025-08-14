@@ -13,7 +13,7 @@ jobs:
       GITHUB_APP_PEM: ${{ secrets.APP_PEM }}
       GITHUB_APP_INSTALLATION_ID: ${{ secrets.APP_INSTALLATION_ID }}
       GITHUB_APP_ID: ${{ secrets.APP_ID }}
-      GITHUB_ORGANIZATION: "Platform-management"
+      GITHUB_OWNER: "Platform-management"
 
     steps:
       - name: Checkout repository
@@ -39,7 +39,7 @@ jobs:
           GITHUB_APP_ID: ${{ env.GITHUB_APP_ID }}
           GITHUB_APP_INSTALLATION_ID: ${{ env.GITHUB_APP_INSTALLATION_ID }}
           GITHUB_APP_PEM_FILE: "./app.pem"
-          GITHUB_ORGANIZATION: "Platform-management"
+          GITHUB_OWNER: "Platform-management"
 
       - name: Terragrunt Plan
         working-directory: ./live
@@ -48,7 +48,7 @@ jobs:
           GITHUB_APP_ID: ${{ env.GITHUB_APP_ID }}
           GITHUB_APP_INSTALLATION_ID: ${{ env.GITHUB_APP_INSTALLATION_ID }}
           GITHUB_APP_PEM_FILE: "./app.pem"
-          GITHUB_ORGANIZATION: "Platform-management"
+          GITHUB_OWNER: "Platform-management"
 
       - name: Terragrunt Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -58,4 +58,4 @@ jobs:
           GITHUB_APP_ID: ${{ env.GITHUB_APP_ID }}
           GITHUB_APP_INSTALLATION_ID: ${{ env.GITHUB_APP_INSTALLATION_ID }}
           GITHUB_APP_PEM_FILE: "./app.pem"
-          GITHUB_ORGANIZATION: "Platform-management"
+          GITHUB_OWNER: "Platform-management"
