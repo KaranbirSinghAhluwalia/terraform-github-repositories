@@ -9,5 +9,9 @@ terraform {
 
 provider "github" {
   owner = var.github_owner
-  token = var.github_token != "" ? var.github_token : null
+  auth {
+    app_id                 = var.github_app_id
+    app_installation_id    = var.github_app_installation_id
+    app_pem_file           = var.github_app_pem_file
+  }
 }
