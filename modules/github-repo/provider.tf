@@ -14,6 +14,6 @@ provider "github" {
   app_auth {
     id              = 1782237
     installation_id = 80950058
-    pem_file        = "${path.root}/app.pem"
+    pem_file        = "../../app.pem"
   }
 }
