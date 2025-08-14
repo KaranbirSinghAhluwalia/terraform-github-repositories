@@ -33,7 +33,7 @@ jobs:
         run: echo "$GITHUB_APP_PEM" > ./app.pem
 
       - name: check files
-        run: ls -alh
+        run: ls
 
       - name: Terragrunt Init
         working-directory: ./live
