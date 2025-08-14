@@ -13,6 +13,7 @@ jobs:
       GITHUB_APP_PEM: ${{ secrets.APP_PEM }}
       GITHUB_APP_INSTALLATION_ID: ${{ secrets.APP_INSTALLATION_ID }}
       GITHUB_APP_ID: ${{ secrets.APP_ID }}
+      GITHUB_ORGANIZATION: "Platform-management"
 
     steps:
       - name: Checkout repository
@@ -35,26 +36,26 @@ jobs:
         working-directory: ./live
         run: terragrunt run-all init
         env:
-          TF_VAR_github_app_id: ${{ env.GITHUB_APP_ID }}
-          TF_VAR_github_app_installation_id: ${{ env.GITHUB_APP_INSTALLATION_ID }}
-          TF_VAR_github_app_pem_file: "./app.pem"
-          TF_VAR_github_organization: "Platform-management"
+          GITHUB_APP_ID: ${{ env.GITHUB_APP_ID }}
+          GITHUB_APP_INSTALLATION_ID: ${{ env.GITHUB_APP_INSTALLATION_ID }}
+          GITHUB_APP_PEM_FILE: "./app.pem"
+          GITHUB_ORGANIZATION: "Platform-management"
 
       - name: Terragrunt Plan
         working-directory: ./live
         run: terragrunt run-all plan -out=plan.tfplan
         env:
-          TF_VAR_github_app_id: ${{ env.GITHUB_APP_ID }}
-          TF_VAR_github_app_installation_id: ${{ env.GITHUB_APP_INSTALLATION_ID }}
-          TF_VAR_github_app_pem_file: "./app.pem"
-          TF_VAR_github_organization: "Platform-management"
+          GITHUB_APP_ID: ${{ env.GITHUB_APP_ID }}
+          GITHUB_APP_INSTALLATION_ID: ${{ env.GITHUB_APP_INSTALLATION_ID }}
+          GITHUB_APP_PEM_FILE: "./app.pem"
+          GITHUB_ORGANIZATION: "Platform-management"
 
       - name: Terragrunt Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         working-directory: ./live
         run: terragrunt run-all apply --terragrunt-non-interactive -auto-approve plan.tfplan
         env:
-          TF_VAR_github_app_id: ${{ env.GITHUB_APP_ID }}
-          TF_VAR_github_app_installation_id: ${{ env.GITHUB_APP_INSTALLATION_ID }}
-          TF_VAR_github_app_pem_file: "./app.pem"
-          TF_VAR_github_organization: "Platform-management"
+          GITHUB_APP_ID: ${{ env.GITHUB_APP_ID }}
+          GITHUB_APP_INSTALLATION_ID: ${{ env.GITHUB_APP_INSTALLATION_ID }}
+          GITHUB_APP_PEM_FILE: "./app.pem"
+          GITHUB_ORGANIZATION: "Platform-management"
