@@ -32,18 +32,12 @@ jobs:
 
       - name: Write GitHub App PEM to root
         run: | 
-          cat <<EOF > "${{ github.workspace }}/app.pem"
-          ${{ secrets.GH_APP_PEM }}
-          EOF
-          chmod 600 "${{ github.workspace }}/app.pem"
-
+          printf '%s\n' "$GITHUB_APP_PEM" > ${{ github.workspace }}/app.pem
+          chmod 600 ${{ github.workspace }}/app.pem
+          
       - name: Generate GitHub App JWT
         run: |
-          ls -la .
-
-      - name: dir
-        working-directory: ./live
-        run: ls -la .
+          ls -la ${{ github.workspace }}
 
       - name: Terragrunt Init
         working-directory: ./live
