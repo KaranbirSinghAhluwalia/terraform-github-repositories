@@ -7,7 +7,7 @@ on:
   pull_request:
 
 jobs:
-  terragrunt:
+  terragrunt-plan-apply:
     runs-on: ubuntu-latest
     env:
       GITHUB_APP_PEM: ${{ secrets.APP_PEM }}
@@ -21,7 +21,7 @@ jobs:
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.7.7
+          terraform_version: 1.5.7
 
       - name: Install Terragrunt
         run: |
@@ -38,6 +38,7 @@ jobs:
           TF_VAR_github_app_id: ${{ env.GITHUB_APP_ID }}
           TF_VAR_github_app_installation_id: ${{ env.GITHUB_APP_INSTALLATION_ID }}
           TF_VAR_github_app_pem_file: "./app.pem"
+          TF_VAR_github_organization: "Platform-management"
 
       - name: Terragrunt Plan
         working-directory: ./live
@@ -46,12 +47,14 @@ jobs:
           TF_VAR_github_app_id: ${{ env.GITHUB_APP_ID }}
           TF_VAR_github_app_installation_id: ${{ env.GITHUB_APP_INSTALLATION_ID }}
           TF_VAR_github_app_pem_file: "./app.pem"
+          TF_VAR_github_organization: "Platform-management"
 
       - name: Terragrunt Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         working-directory: ./live
-        run: terragrunt run-all apply -auto-approve plan.tfplan
+        run: terragrunt run-all apply --terragrunt-non-interactive -auto-approve plan.tfplan
         env:
           TF_VAR_github_app_id: ${{ env.GITHUB_APP_ID }}
           TF_VAR_github_app_installation_id: ${{ env.GITHUB_APP_INSTALLATION_ID }}
           TF_VAR_github_app_pem_file: "./app.pem"
+          TF_VAR_github_organization: "Platform-management"
