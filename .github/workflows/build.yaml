@@ -46,6 +46,14 @@ jobs:
       - name: Terragrunt Plan
         working-directory: ./live
         run: terragrunt run-all plan -out=plan.tfplan
+      
+      - name: Debug working directory before apply
+        working-directory: ./live
+        run: |
+          pwd
+          ls -la
+          cd ..
+          ls -la
 
       - name: Terragrunt Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
