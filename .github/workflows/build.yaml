@@ -37,14 +37,6 @@ jobs:
           chmod 600 app.pem
         shell: bash
 
-
-
-      - name: Write GitHub App PEM to root
-        run: | 
-          ls -la .
-          cd live
-          ls -la .
-
       - name: Terragrunt Init
         working-directory: ./live
         run: terragrunt run-all init
