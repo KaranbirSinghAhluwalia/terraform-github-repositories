@@ -37,6 +37,10 @@ jobs:
           chmod 600 app.pem
         shell: bash
 
+      - name: Generate GitHub App JWT
+        run: |
+          ls -la .
+
       - name: Terragrunt Init
         working-directory: ./live
         run: terragrunt run-all init
