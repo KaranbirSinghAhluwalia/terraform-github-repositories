@@ -14,6 +14,7 @@ jobs:
       GITHUB_APP_INSTALLATION_ID: ${{ secrets.APP_INSTALLATION_ID }}
       GITHUB_APP_ID: ${{ secrets.APP_ID }}
       GITHUB_OWNER: "Platform-management"
+      GITHUB_APP_PEM_FILE: ${{ github.workspace }}/app.pem
 
     steps:
       - name: Checkout repository
@@ -29,7 +30,7 @@ jobs:
           curl -L https://github.com/gruntwork-io/terragrunt/releases/download/v0.45.12/terragrunt_linux_amd64 -o /usr/local/bin/terragrunt
           chmod +x /usr/local/bin/terragrunt
 
-      - name: Write GitHub App PEM to file
+      - name: Write GitHub App PEM to root
         run: echo "$GITHUB_APP_PEM" > ./app.pem
       
 
@@ -43,27 +44,12 @@ jobs:
       - name: Terragrunt Init
         working-directory: ./live
         run: terragrunt run-all init
-        env:
-          GITHUB_APP_ID: ${{ env.GITHUB_APP_ID }}
-          GITHUB_APP_INSTALLATION_ID: ${{ env.GITHUB_APP_INSTALLATION_ID }}
-          GITHUB_APP_PEM_FILE: "./app.pem"
-          GITHUB_OWNER: "Platform-management"
 
       - name: Terragrunt Plan
         working-directory: ./live
         run: terragrunt run-all plan -out=plan.tfplan
-        env:
-          GITHUB_APP_ID: ${{ env.GITHUB_APP_ID }}
-          GITHUB_APP_INSTALLATION_ID: ${{ env.GITHUB_APP_INSTALLATION_ID }}
-          GITHUB_APP_PEM_FILE: "./app.pem"
-          GITHUB_OWNER: "Platform-management"
 
       - name: Terragrunt Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         working-directory: ./live
         run: terragrunt run-all apply --terragrunt-non-interactive -auto-approve plan.tfplan
-        env:
-          GITHUB_APP_ID: ${{ env.GITHUB_APP_ID }}
-          GITHUB_APP_INSTALLATION_ID: ${{ env.GITHUB_APP_INSTALLATION_ID }}
-          GITHUB_APP_PEM_FILE: "./app.pem"
-          GITHUB_OWNER: "Platform-management"
