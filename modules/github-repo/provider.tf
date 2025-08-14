@@ -10,8 +10,8 @@ terraform {
 provider "github" {
   owner = env("GITHUB_ORGANIZATION")
   auth {
-    app_id                 = tonumber(env("GITHUB_APP_ID"))
-    app_installation_id    = tonumber(env("GITHUB_APP_INSTALLATION_ID"))
-    app_pem_file           = env("GITHUB_APP_PEM_FILE")
+    id                 = tonumber(env("GITHUB_APP_ID"))
+    installation_id    = tonumber(env("GITHUB_APP_INSTALLATION_ID"))
+    pem_file           = env("GITHUB_APP_PEM_FILE")
   }
 }
