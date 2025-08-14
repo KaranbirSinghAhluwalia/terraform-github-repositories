@@ -31,16 +31,14 @@ jobs:
 
       - name: Write GitHub App PEM to root
         run: | 
-          printf '%s\n' "$GITHUB_APP_PEM" > ./app.pem
-          chmod 600 ./app.pem
+          cat <<'EOF' > app.pem
+          $GITHUB_APP_PEM
+          EOF
+          chmod 600 app.pem
         shell: bash
 
-      - name: Debug secret format
-        run: |
-          echo "$GITHUB_APP_PEM" | head -n 3
-          echo "$GITHUB_APP_PEM" | grep '\\n' && echo "Has literal backslash-ns"
 
-          
+
       - name: Write GitHub App PEM to root
         run: | 
           ls -la .
