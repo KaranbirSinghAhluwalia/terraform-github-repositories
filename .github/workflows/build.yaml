@@ -31,6 +31,7 @@ jobs:
           chmod +x /usr/local/bin/terragrunt
 
       - name: Write GitHub App PEM to root
+        working-directory: ./live
         run: | 
           echo -e "${{ secrets.GH_APP_PEM }}" > app.pem
           chmod 600 app.pem 
