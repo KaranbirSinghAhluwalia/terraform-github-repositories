@@ -31,6 +31,14 @@ jobs:
 
       - name: Write GitHub App PEM to file
         run: echo "$GITHUB_APP_PEM" > ./app.pem
+      
+
+      - name: Check env vars
+        run: |
+          echo "GITHUB_OWNER=$GITHUB_OWNER"
+          echo "GITHUB_APP_ID=$GITHUB_APP_ID"
+          echo "GITHUB_APP_INSTALLATION_ID=$GITHUB_APP_INSTALLATION_ID"
+          echo "GITHUB_APP_PEM_FILE exists: $(test -f $GITHUB_APP_PEM_FILE && echo yes || echo no)"
 
       - name: Terragrunt Init
         working-directory: ./live
