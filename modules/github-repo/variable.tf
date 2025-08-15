@@ -1,16 +1,19 @@
 variable "app_id" {
   description = "GitHub App ID"
   type = string
+  default = ""
 }
 
 variable "app_installation_id" {
   description = "GitHub App Installation ID"
   type = string
+  default = ""
 }
 
 variable "app_pem_path" {
   description = "Path to the GitHub App PEM file"
   type = string
+  default = ""
 }
 
 variable "repo_name" {
