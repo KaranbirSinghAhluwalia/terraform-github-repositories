@@ -1,3 +1,18 @@
+variable "app_id" {
+  description = "GitHub App ID"
+  type = string
+}
+
+variable "app_installation_id" {
+  description = "GitHub App Installation ID"
+  type = string
+}
+
+variable "app_pem_path" {
+  description = "Path to the GitHub App PEM file"
+  type = string
+}
+
 variable "repo_name" {
   description = "GitHub repository name"
   type        = string
