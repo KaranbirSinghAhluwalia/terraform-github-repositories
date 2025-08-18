@@ -15,7 +15,6 @@ jobs:
       GITHUB_APP_INSTALLATION_ID: ${{ secrets.APP_INSTALLATION_ID }}
       GITHUB_APP_ID: ${{ secrets.APP_ID }}
       GITHUB_OWNER: "Platform-management"
-      APP_PEM_PATH: "${{ github.workspace }}/app.pem"
 
     steps:
       - name: Checkout repository
@@ -25,20 +24,11 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.5.7
-
+  
       - name: Install Terragrunt
         run: |
           curl -L https://github.com/gruntwork-io/terragrunt/releases/download/v0.45.12/terragrunt_linux_amd64 -o /usr/local/bin/terragrunt
           chmod +x /usr/local/bin/terragrunt
-
-      - name: Write GitHub App PEM to root
-        run: | 
-          printf '%s\n' "$GITHUB_APP_PEM" > ${{ github.workspace }}/app.pem
-          chmod 600 ${{ github.workspace }}/app.pem
-          
-      - name: Generate GitHub App JWT
-        run: |
-          ls -la ${{ github.workspace }}
 
       - name: Terragrunt Init
         working-directory: ./live
@@ -48,14 +38,6 @@ jobs:
         working-directory: ./live
         run: terragrunt run-all plan -out=plan.tfplan
       
-      - name: Debug working directory before apply
-        working-directory: ./live
-        run: |
-          pwd
-          ls -la
-          cd ..
-          ls -la
-
       - name: Terragrunt Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         working-directory: ./live
