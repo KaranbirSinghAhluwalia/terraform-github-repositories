@@ -31,6 +31,7 @@ module "readme" {
 module "workflow" {
   source    = "./workflow"
   repo_name = module.repository.repo_name
+  project_type = var.project_type
 } 
 
 # Add repository secrets

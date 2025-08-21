@@ -7,6 +7,7 @@ inputs = {
   repo_description = "Terraform managed repo one"
   repo_visibility  = "private"
   repo_topics      = ["terraform", "iac"]
+  project_type     = "nodejs" 
 
   branch_protections = [
   {

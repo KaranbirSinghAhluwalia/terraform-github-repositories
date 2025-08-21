@@ -39,6 +39,12 @@ variable "repo_topics" {
   default     = []
 }
 
+variable "project_type" {
+  description = "Type of the project to determine which CI workflow to create"
+  type        = string
+  default     = "terraform"
+}
+
 variable "branch_protections" {
   type = list(object({
     pattern                      = string
