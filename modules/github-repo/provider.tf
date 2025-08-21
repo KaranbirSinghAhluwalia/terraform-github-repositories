@@ -10,5 +10,5 @@ terraform {
 
 provider "github" {
   owner = env("GITHUB_OWNER")
-  app_auth {}
+  token = env("GITHUB_TOKEN")
 }

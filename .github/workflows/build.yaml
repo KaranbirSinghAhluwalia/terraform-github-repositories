@@ -15,6 +15,7 @@ jobs:
       GITHUB_APP_INSTALLATION_ID: ${{ secrets.APP_INSTALLATION_ID }}
       GITHUB_APP_ID: ${{ secrets.APP_ID }}
       GITHUB_OWNER: "Platform-management"
+      GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
     steps:
       - name: Checkout repository
