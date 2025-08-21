@@ -1,6 +1,5 @@
 variable "repo_name" {
-  description = "The name of the repository to apply branch protection to."
-  type        = string
+  type = string
 }
 
 variable "branch_protections" {
@@ -21,21 +20,19 @@ Each rule is an object with the following attributes:
 EOT
 
   type = list(object({
-    pattern        = string
-    enforce_admins = optional(bool, true)
+    pattern                           = string
+    enforce_admins                    = optional(bool)
+    required_checks                   = optional(list(string), [])
 
-    allow_force_pushes     = optional(bool, false)
-    allow_deletions        = optional(bool, false)
-    require_linear_history = optional(bool, true)
-
-    required_checks = optional(list(string), [])
-
-    required_pull_request_reviews = optional(object({
+    required_pull_request_reviews     = optional(object({
       required_approving_review_count = optional(number, 1)
     }), {})
 
-    push_restricted_users = optional(list(string), [])
-    push_restricted_teams = optional(list(string), [])
+    allow_force_pushes                = optional(bool)
+    allow_deletions                   = optional(bool)
+
+    push_restricted_users             = optional(list(string), [])
+    push_restricted_teams             = optional(list(string), [])
   }))
   default = []
 }

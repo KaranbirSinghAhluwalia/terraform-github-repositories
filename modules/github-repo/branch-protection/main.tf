@@ -5,9 +5,6 @@ resource "github_branch_protection_v3" "rules" {
   branch     = each.key
 
   enforce_admins        = each.value.enforce_admins
-  allows_force_pushes   = each.value.allow_force_pushes
-  allows_deletions      = each.value.allow_deletions
-  require_linear_history = each.value.require_linear_history
 
   required_status_checks {
     strict = true
