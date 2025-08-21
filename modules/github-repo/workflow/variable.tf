@@ -9,19 +9,27 @@ variable "project_type" {
   default     = "terraform"
 }
 
+variable "branch_depends_on" {
+  type = any
+  default = null
+}
+
+variable "branch_name" {
+  type = string
+}
+
+
 variable "workflows" {
   description = "Map of project types to workflow content"
   type        = map(string)
   default = {
     terraform = <<EOT
 name: Terraform CI
-
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
-
+    branches: ["main"]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -37,29 +45,19 @@ jobs:
         run: terraform validate
 EOT
 
-    nodejs = <<EOT
+    nodejs = <<-EOT
 name: Node.js CI
-
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
-
+    branches: ["main"]
 jobs:
   build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14,16]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - run: npm install
-      - run: npm test
+    uses: /Infrastructure/.github/workflows/nodejs.yml@main
+    with:
+      node-version: $${{ inputs.node-version || 16 }}
+      npm-version: $${{ inputs.npm-version || 8 }}
 EOT
   }
 }

@@ -1,6 +1,7 @@
 resource "github_repository_file" "readme" {
   repository          = var.repo_name
   file                = "README.md"
+  depends_on          = [var.branch_depends_on]
   content             = <<EOT
 # ${var.repo_name}
 
@@ -44,8 +45,8 @@ This repo includes a CI workflow in [`.github/workflows/ci.yaml`](.github/workfl
 This repository uses the **MIT License**.
 
 ---
-EOT
-  branch              = "main"
+EOT  
+  branch              = var.branch_name
   commit_message      = "Add README.md"
   overwrite_on_create = true
 }

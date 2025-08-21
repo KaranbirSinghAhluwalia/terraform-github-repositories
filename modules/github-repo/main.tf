@@ -21,10 +21,20 @@ module "collaborators" {
   collaborators = var.collaborators
 }
 
+module "add_readme_branch" {
+  source        = "../../modules/github-branch"
+  repo_name     = var.repo_name
+  branch_name   = "add-readme"
+  source_branch = "main"
+}
+
+
 # Create a README file
 module "readme" {
   source    = "./readme"
   repo_name = module.repository.repo_name
+  branch_name      = module.add_readme_branch.branch_name
+  branch_depends_on = [module.add_readme_branch]
 }
 
 # Create a CI workflow file
@@ -32,6 +42,8 @@ module "workflow" {
   source    = "./workflow"
   repo_name = module.repository.repo_name
   project_type = var.project_type
+  branch_name      = module.add_readme_branch.branch_name
+  branch_depends_on = [module.add_readme_branch]
 } 
 
 # Add repository secrets
